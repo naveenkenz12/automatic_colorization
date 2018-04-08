@@ -15,9 +15,10 @@ def rgb_to_cieluv(rgb_image):
 			r, g, b = normalize(rgb_image[i][j][0], rgb_image[i][j][1], rgb_image[i][j][2])
 			x, y, z = rgb_to_xyz_pixel(r, g, b)
 			l, u, v = xyz_to_luv_pixel(x, y, z)
-			luv_image[i][j][0] = l
-			luv_image[i][j][1] = u
-			luv_image[i][j][2] = v
+			# normalize l, u, v
+			luv_image[i][j][0] = l*255.0/100.0
+			luv_image[i][j][1] = (u+134)*255.0/354.0
+			luv_image[i][j][2] = (v+140)*255.0/262.0
 
 	return luv_image
 
