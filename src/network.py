@@ -14,10 +14,10 @@ import os
 import sys
 
 class Network:
-	def __init__(self,train,c_params,n_params):
+	def __init__(self,train,params):
 		self.train = train
     	self.weight_decay = 0.01
-    	self.final_conv = self.create_net()
+    	#self.final_conv = self.create_net()
 
     def create_net(self,data_i):
     	conv1 = conv2d('conv1' , data_i, [3,3,1,64], stride=1,wd=self.weight_decay)
