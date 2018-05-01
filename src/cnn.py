@@ -57,14 +57,14 @@ def conv2d(scope, input, kernel_size, stride=1, wd=nilboy_weight_decay):
 	return conv1
 
 def deconv2d(scope, input, kernel_size, stride=1, wd=nilboy_weight_decay):
-  """convolutional layer
+  	"""convolutional layer
 
-  Args:
+ 	Args:
 	input: 4-D tensor [batch_size, height, width, depth]
 	scope: variable_scope name 
 	kernel_size: [k_height, k_width, in_channel, out_channel]
 	stride: int32
-  Return:
+ 	Return:
 	output: 4-D tensor [batch_size, height * stride, width * stride, out_channel]
   """
 	pad_size = int((kernel_size[0] - 1)/2)
