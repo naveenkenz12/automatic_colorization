@@ -75,7 +75,6 @@ class Solver(object):
 		sess = tf.Session(config=config)
 		sess.run(init)
 		#saver1.restore(sess, './models/model.ckpt')
-		#nilboy
 		summary_writer = tf.summary.FileWriter(self.train_dir, sess.graph)
 		for step in range(self.max_steps):
 			print(step)
