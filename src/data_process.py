@@ -32,9 +32,12 @@ class DataSet:
 		
 		'''
 		for loops to read all files'''
+
+		size = 224, 224
 		# record list contain names of all training images
 		for ele in self.record_list:
 			img = Image.open(ele)
+			img.thumbnail(size, Image.ANTIALIAS)
 			out = numpy.array(img)
 			if len(out.shape)==3 and out.shape[2]==3:
 				#self.image_queue.put(out)
@@ -68,9 +71,11 @@ class DataSet:
 		N = data.shape[0]
 		H = data.shape[1]
 		W = data.shape[2]
-		data_l = data[:,:,:,0]
+		data_l = data[:,:,:,0:1]
 		data_u = data[:,:,:,1]
 		data_v = data[:,:,:,2]
+
+
 		return data_l, data_u, data_v
 
 	def normalize(self, r, g, b):

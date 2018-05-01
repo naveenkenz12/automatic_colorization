@@ -34,8 +34,8 @@ class Solver(object):
 
 	def construct_graph(self, scope):
 		self.data_l = tf.placeholder(tf.float32, (self.batch_size, self.height, self.width, 1))
-		self.gt_ab_313 = tf.placeholder(tf.float32, (self.batch_size, self.height, self.width , 1))
-		self.prior_boost_nongray = tf.placeholder(tf.float32, (self.batch_size, self.height, self.width, 1))
+		self.gt_ab_313 = tf.placeholder(tf.float32, (self.batch_size, self.height, self.width))
+		self.prior_boost_nongray = tf.placeholder(tf.float32, (self.batch_size, self.height, self.width))
 		self.final_u,self.final_v = self.net.create_net(self.data_l)
 		self.new_loss = self.net.loss(self.final_u,self.final_v, self.prior_boost_nongray, self.gt_ab_313)
 		tf.summary.scalar('new_loss', self.new_loss)
@@ -88,9 +88,9 @@ class Solver(object):
 			t3 = time.time()
 			print('io: ' + str(t2 - t1) + '; compute: ' + str(t3 - t2))
 			assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
-			if step % 10 == 0:
-				summary_str = sess.run(summary_op, feed_dict={self.data_l:data_l, self.gt_ab_313:gt_ab_313, self.prior_boost_nongray:prior_boost_nongray})
-				summary_writer.add_summary(summary_str, step)
+			# if step % 10 == 0:
+			# 	summary_str = sess.run(summary_op, feed_dict={self.data_l:data_l, self.gt_ab_313:gt_ab_313, self.prior_boost_nongray:prior_boost_nongray})
+			# 	summary_writer.add_summary(summary_str, step)
 			if step % 1000 == 0:
 				checkpoint_path = os.path.join(self.train_dir, 'model.ckpt')
 				saver.save(sess, checkpoint_path, global_step=step)

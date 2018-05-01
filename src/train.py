@@ -4,11 +4,11 @@ from solver import Solver
 
 params = {}
 #common_params, dataset_params, net_params, solver_params = process_config(conf_file)
-params["batch_size"] = 1
+params["batch_size"] = 10
 params['image_size'] = 224
 params['learning_rate'] = 1
 params['moment'] = 1
-params['max_iterators'] = 100
+params['max_iterators'] = 10
 params['train_dir'] = '../datasets/'
 params['path'] = "../datasets/"
 params['lr_decay'] = 0.5
