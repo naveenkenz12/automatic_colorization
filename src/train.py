@@ -1,3 +1,4 @@
+from data_process import DataSet
 import sys
 from network import Network
 #from solver import Solver
@@ -12,13 +13,14 @@ def construct_graph(self, scope):
 	tf.summary.scalar('new_loss', new_loss)
 	#tf.summary.scalar('total_loss', g_loss)
 	return new_loss
+
 params = {}
 #common_params, dataset_params, net_params, solver_params = process_config(conf_file)
-params["batch_size"] = 10
+params["batch_size"] = 40
 params['image_size'] = 224
-params['learning_rate'] = 1
+params['learning_rate'] = 0.00003
 params['moment'] = 1
-params['max_iterators'] = 10
+params['max_iterators'] = 100000
 params['train_dir'] = '../datasets/'
 params['path'] = "../datasets/"
 params['lr_decay'] = 0.5
@@ -34,23 +36,21 @@ max_steps = int(params['max_iterators'])
 train_dir = str(params['train_dir'])
 lr_decay = float(params['lr_decay'])
 decay_steps = int(params['decay_steps'])
-train = train
+train = True
 net = Network(train=train, params=params)		
 dataset = DataSet(params=params)
 
-#if len(str(common_params['gpus']).split(','))==1:
-#solver = Solver(True, params)#, solver_params, net_params, dataset_params)
-solver.train_model()
 
 global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
-learning_rate = tf.train.exponential_decay(learning_rate, global_step,
-																		 decay_steps, lr_decay, staircase=True)
+learning_rate = tf.train.exponential_decay(learning_rate, global_step,decay_steps, lr_decay, staircase=True)
 opt = tf.train.AdamOptimizer(learning_rate=learning_rate, beta2=0.99)
-with tf.name_scope('gpu') as scope:
+#print("hello")
+with tf.name_scope('entry') as scope:
 	new_loss = construct_graph(scope)
 	summaries = tf.get_collection(tf.GraphKeys.SUMMARIES, scope)
 grads = opt.compute_gradients(new_loss)
 summaries.append(tf.summary.scalar('learning_rate', learning_rate))
+#print("hello1")
 for grad, var in grads:
 	if grad is not None:
 		summaries.append(tf.summary.histogram(var.op.name + '/gradients', grad))
@@ -66,7 +66,6 @@ saver1 = tf.train.Saver()
 summary_op = tf.summary.merge(summaries)
 init =  tf.global_variables_initializer()
 config = tf.ConfigProto(allow_soft_placement=True)
-config.gpu_options.allow_growth = True
 sess = tf.Session(config=config)
 sess.run(init)
 #saver1.restore(sess, './models/model.ckpt')

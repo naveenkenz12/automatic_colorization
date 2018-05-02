@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import numpy
 from PIL import Image
 from multiprocessing import Queue
@@ -29,9 +25,10 @@ class DataSet:
 			for name in files:
 				if name.endswith(".jpg"):
 					self.record_list.append(os.path.join(root, name))
-		
+		#print(self.record_list)
 		'''
-		for loops to read all files'''
+		for loops to read all files
+		'''
 
 		size = 224, 224
 		# record list contain names of all training images
@@ -108,9 +105,14 @@ class DataSet:
 				l, u, v = self.xyz_to_luv_pixel(x, y, z)
 				# normalize l, u, v
 				luv_image[i][j][0] = l*255.0/100.0
-				luv_image[i][j][1] = (u+134)*255.0/354.0
-				luv_image[i][j][2] = (v+140)*255.0/262.0
-
+				try:
+					luv_image[i][j][1] = int(((u+134)*255.0/354.0)*(50.0/255.0))
+				except:
+					luv_image[i][j][1] = 0
+				try:
+					luv_image[i][j][2] = int(((v+140)*255.0/262.0)*(50.0/255.0))
+				except:
+					luv_image[i][j][2]
 		return luv_image
 
 	def rgb_to_xyz_pixel(self, r, g, b):

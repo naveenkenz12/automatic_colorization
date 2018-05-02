@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from data_process import DataSet
 
 import tensorflow as tf
 import numpy as np
@@ -68,10 +69,8 @@ class Network:
 		return final_u,final_v
 
 	def loss(self,final_u,final_v,image_u,image_v):
-		final_u = tf.reduce_max(final_u,axis=-1)
-		final_v = tf.reduce_max(final_v,axis=-1)
-		# image_u_sftmx = tf.nn.softmax(image_u)
-		# image_v_sftmx = tf.nn.softmax(image_v)
+		final_u = tf.argmax(final_u,axis=-1)
+		final_v = tf.argmax(final_v,axis=-1)
 		def_u = tf.reduce_sum(tf.square(tf.subtract(final_u,image_u)))
 		def_v = tf.reduce_sum(tf.square(tf.subtract(final_v,image_v)))
 		return def_u+def_v
